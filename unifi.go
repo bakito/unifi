@@ -173,25 +173,32 @@ type command struct {
 	Minutes int    `json:"minutes,omitempty"`
 }
 
-func (u *Unifi) devcmd(mac, cmd string) error {
-	return u.maccmd("devmgr", command{Mac: mac, Cmd: cmd})
+func (u *Unifi) devcmd(site, mac, cmd string) error {
+	return u.maccmd(site, "devmgr", command{Mac: mac, Cmd: cmd})
 }
 
-func (u *Unifi) stacmd(mac, cmd string, min ...int) error {
+func (u *Unifi) stacmd(site, mac, cmd string, min ...int) error {
 	minutes := 0
 	if len(min) > 0 {
 		minutes = min[0]
 	}
-	return u.maccmd("stamgr", command{Mac: mac, Cmd: cmd, Minutes: minutes})
+	return u.maccmd(site, "stamgr", command{Mac: mac, Cmd: cmd, Minutes: minutes})
 }
 
-func (u *Unifi) maccmd(mgr string, args interface{}) error {
+func (u *Unifi) maccmd(site string, mgr string, args interface{}) error {
+	apiURL := u.apiURL
+
+	// For site specific command, add site settings
+	if site != "" {
+		apiURL += fmt.Sprintf("s/%s/", site)
+	}
+
 	param, err := json.Marshal(args)
 	if err != nil {
 		return err
 	}
 	val := url.Values{"json": {string(param)}}
-	_, err = u.client.PostForm(u.apiURL+"cmd/"+mgr, val)
+	_, err = u.client.PostForm(apiURL+"cmd/"+mgr, val)
 	return err
 }
 
