@@ -56,6 +56,9 @@ func Login(user, pass, host, port, site string, version int) (*Unifi, error) {
 		Jar:       cj,
 	}
 	u.baseURL = "https://" + host + ":" + port + "/"
+	if version >= 6 {
+		u.baseURL += "proxy/network/"
+	}
 	u.version = version
 
 	l := new(login)
