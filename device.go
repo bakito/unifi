@@ -20,7 +20,7 @@ type DownlinkTable struct {
 }
 
 type Port struct {
-	AggregatedBy   interface{} `json:"aggregated_by"` // FIXME: type false or int (5.6.22)
+	AggregatedBy   any `json:"aggregated_by"` // FIXME: type false or int (5.6.22)
 	Autoneg        bool
 	BytesR         int64  `json:"bytes-r"`
 	Dot1xMode      string `json:"dot1x_mode"`
@@ -89,17 +89,17 @@ type Uplink struct {
 	Netmask     string `json:"netmask"`
 	NumPort     int    `json:"num_port"`
 	RxBytes     int64  `json:"rx_bytes"`
-	RxBytesR    int    `json:"rx_bytes-r"`
-	RxDropped   int    `json:"rx_dropped"`
-	RxErrors    int    `json:"rx_errors"`
-	RxMulticast int    `json:"rx_multicast"`
-	RxPackets   int    `json:"rx_packets"`
+	RxBytesR    int64  `json:"rx_bytes-r"`
+	RxDropped   int64  `json:"rx_dropped"`
+	RxErrors    int64  `json:"rx_errors"`
+	RxMulticast int64  `json:"rx_multicast"`
+	RxPackets   int64  `json:"rx_packets"`
 	Speed       int    `json:"speed"`
 	TxBytes     int64  `json:"tx_bytes"`
-	TxBytesR    int    `json:"tx_bytes-r"`
-	TxDropped   int    `json:"tx_dropped"`
-	TxErrors    int    `json:"tx_errors"`
-	TxPackets   int    `json:"tx_packets"`
+	TxBytesR    int64  `json:"tx_bytes-r"`
+	TxDropped   int64  `json:"tx_dropped"`
+	TxErrors    int64  `json:"tx_errors"`
+	TxPackets   int64  `json:"tx_packets"`
 	Type        string `json:"type"`
 	Up          bool   `json:"up"`
 }
@@ -122,17 +122,17 @@ type StaTable struct {
 	Mac           string
 	Noise         int
 	Rssi          int
-	RxBytes       int `json:"rx_bytes"`
-	RxPackets     int `json:"rx_packets"`
-	RxRate        int `json:"rx_rate"`
+	RxBytes       int64 `json:"rx_bytes"`
+	RxPackets     int64 `json:"rx_packets"`
+	RxRate        int64 `json:"rx_rate"`
 	Signal        int
 	State         int
-	StateHt       bool `json:"state_ht"`
-	StatePwrmgt   bool `json:"state_pwrmgt"`
-	TxBytes       int  `json:"tx_bytes"`
-	TxPackets     int  `json:"tx_packets"`
-	TxPower       int  `json:"tx_power"`
-	TxRate        int  `json:"tx_rate"`
+	StateHt       bool  `json:"state_ht"`
+	StatePwrmgt   bool  `json:"state_pwrmgt"`
+	TxBytes       int64 `json:"tx_bytes"`
+	TxPackets     int64 `json:"tx_packets"`
+	TxPower       int64 `json:"tx_power"`
+	TxRate        int64 `json:"tx_rate"`
 	Uptime        int
 }
 
@@ -295,24 +295,24 @@ type SysStats struct {
 }
 
 type RadioTableStats struct {
-	AstBeXmit   interface{} `json:"ast_be_xmit"`
-	AstCst      interface{} `json:"ast_cst"`
-	AstTxto     interface{} `json:"ast_txto"`
-	Channel     int         `json:"channel"`
-	CuSelfRx    int         `json:"cu_self_rx"`
-	CuSelfTx    int         `json:"cu_self_tx"`
-	CuTotal     int         `json:"cu_total"`
-	Extchannel  int         `json:"extchannel"`
-	Gain        int         `json:"gain"`
-	GuestNumSta int         `json:"guest-num_sta"`
-	Name        string      `json:"name"`
-	NumSta      int         `json:"num_sta"`
-	Radio       string      `json:"radio"`
-	State       string      `json:"state"`
-	TxPackets   int         `json:"tx_packets"`
-	TxPower     int         `json:"tx_power"`
-	TxRetries   int         `json:"tx_retries"`
-	UserNumSta  int         `json:"user-num_sta"`
+	AstBeXmit   any    `json:"ast_be_xmit"`
+	AstCst      any    `json:"ast_cst"`
+	AstTxto     any    `json:"ast_txto"`
+	Channel     int    `json:"channel"`
+	CuSelfRx    int    `json:"cu_self_rx"`
+	CuSelfTx    int    `json:"cu_self_tx"`
+	CuTotal     int    `json:"cu_total"`
+	Extchannel  int    `json:"extchannel"`
+	Gain        int    `json:"gain"`
+	GuestNumSta int    `json:"guest-num_sta"`
+	Name        string `json:"name"`
+	NumSta      int    `json:"num_sta"`
+	Radio       string `json:"radio"`
+	State       string `json:"state"`
+	TxPackets   int    `json:"tx_packets"`
+	TxPower     int    `json:"tx_power"`
+	TxRetries   int    `json:"tx_retries"`
+	UserNumSta  int    `json:"user-num_sta"`
 }
 
 type SystemStats struct {
@@ -385,7 +385,7 @@ func (u *Unifi) RawDevices(site *Site, filter string) ([]RawDevice, error) {
 	for _, d := range response.Data {
 
 		// unmarshal into a map to check the "type" field
-		var obj map[string]interface{}
+		var obj map[string]any
 		err := json.Unmarshal(d, &obj)
 		if err != nil {
 			return nil, err
@@ -393,7 +393,7 @@ func (u *Unifi) RawDevices(site *Site, filter string) ([]RawDevice, error) {
 
 		deviceType, ok := obj["type"].(string)
 		if !ok {
-			return nil, fmt.Errorf("Error on retrieving object type from raw Json")
+			return nil, fmt.Errorf("error on retrieving object type from raw json")
 		}
 
 		switch filter {
@@ -421,7 +421,7 @@ type Device struct {
 	ID string `json:"_id"`
 	//Uptime             int           `json:"_uptime"`
 	Adopted          bool          `json:"adopted"`
-	AntennaTable     []interface{} `json:"antenna_table,omitempty"`
+	AntennaTable     []any         `json:"antenna_table,omitempty"`
 	Bytes            int           `json:"bytes"`
 	BytesD           int           `json:"bytes-d,omitempty"`
 	BytesR           int           `json:"bytes-r,omitempty"`
@@ -429,31 +429,31 @@ type Device struct {
 	ConfigNetwork    ConfigNetwork `json:"config_network"`
 	ConnectRequestIP string        `json:"connect_request_ip"`
 	//ConnectRequestPort int           `json:"connect_request_port"` //FIXME: Prior to 5.7.20 type string!
-	ConsideredLostAt int           `json:"considered_lost_at"`
-	DeviceID         string        `json:"device_id"`
-	EthernetTable    []Ethernet    `json:"ethernet_table"`
-	FwCaps           int           `json:"fw_caps"`
-	GuestNumSta      int           `json:"guest-num_sta"`
-	GuestToken       string        `json:"guest_token,omitempty"`
-	HasEth1          bool          `json:"has_eth1,omitempty"`
-	HasSpeaker       bool          `json:"has_speaker,omitempty"`
-	InformIP         string        `json:"inform_ip"`
-	InformURL        string        `json:"inform_url"`
-	IP               string        `json:"ip"`
-	Isolated         bool          `json:"isolated,omitempty"`
-	KnownCfgversion  string        `json:"known_cfgversion"`
-	LastSeen         int           `json:"last_seen"`
-	LedOverride      string        `json:"led_override"`
-	LicenseState     string        `json:"license_state"`
-	Locating         bool          `json:"locating"`
-	Mac              string        `json:"mac"`
-	MapID            string        `json:"map_id,omitempty"`
-	Model            string        `json:"model"`
-	Name             string        `json:"name"`
-	NextHeartbeatAt  int           `json:"next_heartbeat_at"`
-	NumSta           int           `json:"num_sta"`
-	PortStats        []interface{} `json:"port_stats,omitempty"`
-	PortTable        []Port        `json:"port_table"`
+	ConsideredLostAt int        `json:"considered_lost_at"`
+	DeviceID         string     `json:"device_id"`
+	EthernetTable    []Ethernet `json:"ethernet_table"`
+	FwCaps           int        `json:"fw_caps"`
+	GuestNumSta      int        `json:"guest-num_sta"`
+	GuestToken       string     `json:"guest_token,omitempty"`
+	HasEth1          bool       `json:"has_eth1,omitempty"`
+	HasSpeaker       bool       `json:"has_speaker,omitempty"`
+	InformIP         string     `json:"inform_ip"`
+	InformURL        string     `json:"inform_url"`
+	IP               string     `json:"ip"`
+	Isolated         bool       `json:"isolated,omitempty"`
+	KnownCfgversion  string     `json:"known_cfgversion"`
+	LastSeen         int        `json:"last_seen"`
+	LedOverride      string     `json:"led_override"`
+	LicenseState     string     `json:"license_state"`
+	Locating         bool       `json:"locating"`
+	Mac              string     `json:"mac"`
+	MapID            string     `json:"map_id,omitempty"`
+	Model            string     `json:"model"`
+	Name             string     `json:"name"`
+	NextHeartbeatAt  int        `json:"next_heartbeat_at"`
+	NumSta           int        `json:"num_sta"`
+	PortStats        []any      `json:"port_stats,omitempty"`
+	PortTable        []Port     `json:"port_table"`
 	RadioTable       []struct {
 		BuiltinAntGain     int    `json:"builtin_ant_gain"`
 		BuiltinAntenna     bool   `json:"builtin_antenna"`
@@ -467,47 +467,47 @@ type Device struct {
 		WlangroupID        string `json:"wlangroup_id"`
 	} `json:"radio_table,omitempty"`
 	RadioTableStats []struct {
-		AstBeXmit   interface{} `json:"ast_be_xmit"`
-		AstCst      interface{} `json:"ast_cst"`
-		AstTxto     interface{} `json:"ast_txto"`
-		Channel     int         `json:"channel"`
-		CuSelfRx    int         `json:"cu_self_rx"`
-		CuSelfTx    int         `json:"cu_self_tx"`
-		CuTotal     int         `json:"cu_total"`
-		Extchannel  int         `json:"extchannel"`
-		Gain        int         `json:"gain"`
-		GuestNumSta int         `json:"guest-num_sta"`
-		Name        string      `json:"name"`
-		NumSta      int         `json:"num_sta"`
-		Radio       string      `json:"radio"`
-		State       string      `json:"state"`
-		TxPackets   int         `json:"tx_packets"`
-		TxPower     int         `json:"tx_power"`
-		TxRetries   int         `json:"tx_retries"`
-		UserNumSta  int         `json:"user-num_sta"`
+		AstBeXmit   any    `json:"ast_be_xmit"`
+		AstCst      any    `json:"ast_cst"`
+		AstTxto     any    `json:"ast_txto"`
+		Channel     int    `json:"channel"`
+		CuSelfRx    int    `json:"cu_self_rx"`
+		CuSelfTx    int    `json:"cu_self_tx"`
+		CuTotal     int    `json:"cu_total"`
+		Extchannel  int    `json:"extchannel"`
+		Gain        int    `json:"gain"`
+		GuestNumSta int    `json:"guest-num_sta"`
+		Name        string `json:"name"`
+		NumSta      int    `json:"num_sta"`
+		Radio       string `json:"radio"`
+		State       string `json:"state"`
+		TxPackets   int    `json:"tx_packets"`
+		TxPower     int    `json:"tx_power"`
+		TxRetries   int    `json:"tx_retries"`
+		UserNumSta  int    `json:"user-num_sta"`
 	} `json:"radio_table_stats,omitempty"`
-	RxBytes           int           `json:"rx_bytes"`
-	RxBytesD          int           `json:"rx_bytes-d,omitempty"`
-	ScanRadioTable    []interface{} `json:"scan_radio_table,omitempty"`
-	Scanning          bool          `json:"scanning,omitempty"`
-	Serial            string        `json:"serial"`
-	SiteID            string        `json:"site_id"`
-	SpectrumScanning  bool          `json:"spectrum_scanning,omitempty"`
-	SSHSessionTable   []interface{} `json:"ssh_session_table,omitempty"`
-	Stat              Stat          `json:"stat"`
-	State             DevState      `json:"state"`
-	SysStats          SysStats      `json:"sys_stats"`
-	SystemStats       SystemStats   `json:"system-stats"`
-	TxBytes           int           `json:"tx_bytes"`
-	TxBytesD          int           `json:"tx_bytes-d,omitempty"`
-	Type              string        `json:"type"`
-	Upgradable        bool          `json:"upgradable"`
-	UpgradeState      int           `json:"upgrade_state"`
-	UpgradeToFirmware string        `json:"upgrade_to_firmware"`
-	Uplink            Uplink        `json:"uplink"`
-	UplinkTable       []interface{} `json:"uplink_table,omitempty"`
-	Uptime            int           `json:"uptime"`
-	UserNumSta        int           `json:"user-num_sta"`
+	RxBytes           int         `json:"rx_bytes"`
+	RxBytesD          int         `json:"rx_bytes-d,omitempty"`
+	ScanRadioTable    []any       `json:"scan_radio_table,omitempty"`
+	Scanning          bool        `json:"scanning,omitempty"`
+	Serial            string      `json:"serial"`
+	SiteID            string      `json:"site_id"`
+	SpectrumScanning  bool        `json:"spectrum_scanning,omitempty"`
+	SSHSessionTable   []any       `json:"ssh_session_table,omitempty"`
+	Stat              Stat        `json:"stat"`
+	State             DevState    `json:"state"`
+	SysStats          SysStats    `json:"sys_stats"`
+	SystemStats       SystemStats `json:"system-stats"`
+	TxBytes           int         `json:"tx_bytes"`
+	TxBytesD          int         `json:"tx_bytes-d,omitempty"`
+	Type              string      `json:"type"`
+	Upgradable        bool        `json:"upgradable"`
+	UpgradeState      int         `json:"upgrade_state"`
+	UpgradeToFirmware string      `json:"upgrade_to_firmware"`
+	Uplink            Uplink      `json:"uplink"`
+	UplinkTable       []any       `json:"uplink_table,omitempty"`
+	Uptime            int         `json:"uptime"`
+	UserNumSta        int         `json:"user-num_sta"`
 	VapTable          []struct {
 		ApMac      string `json:"ap_mac"`
 		Bssid      string `json:"bssid"`
@@ -545,8 +545,8 @@ type Device struct {
 	Version                string           `json:"version"`
 	VersionIncompatible    bool             `json:"version_incompatible"`
 	VwireEnabled           bool             `json:"vwireEnabled,omitempty"`
-	VwireTable             []interface{}    `json:"vwire_table,omitempty"`
-	VwireVapTable          []interface{}    `json:"vwire_vap_table,omitempty"`
+	VwireTable             []any            `json:"vwire_table,omitempty"`
+	VwireVapTable          []any            `json:"vwire_vap_table,omitempty"`
 	WifiCaps               int              `json:"wifi_caps,omitempty"`
 	X                      fuzzyFloat       `json:"x,omitempty"`
 	XAuthkey               string           `json:"x_authkey"`
@@ -556,7 +556,7 @@ type Device struct {
 	XSSHHostkeyFingerprint string           `json:"x_ssh_hostkey_fingerprint"`
 	XVwirekey              string           `json:"x_vwirekey,omitempty"`
 	Y                      fuzzyFloat       `json:"y,omitempty"`
-	DhcpServerTable        []interface{}    `json:"dhcp_server_table,omitempty"`
+	DhcpServerTable        []any            `json:"dhcp_server_table,omitempty"`
 	Dot1XPortctrlEnabled   bool             `json:"dot1x_portctrl_enabled,omitempty"`
 	FlowctrlEnabled        bool             `json:"flowctrl_enabled,omitempty"`
 	GeneralTemperature     int              `json:"general_temperature,omitempty"`
@@ -569,7 +569,7 @@ type Device struct {
 	UplinkDepth            int              `json:"uplink_depth,omitempty"`
 	ConfigNetworkWan       ConfigNetworkWan `json:"config_network_wan,omitempty"`
 	ConfigNetworkWan2      ConfigNetworkWan `json:"config_network_wan2,omitempty"`
-	NetworkTable           []interface{}    `json:"network_table,omitempty"`
+	NetworkTable           []any            `json:"network_table,omitempty"`
 	NumDesktop             int              `json:"num_desktop,omitempty"`
 	NumHandheld            int              `json:"num_handheld,omitempty"`
 	NumMobile              int              `json:"num_mobile,omitempty"`
@@ -595,15 +595,16 @@ type DeviceMap map[string]Device
 
 // Returns a slice of devices
 func (u *Unifi) Devices(site *Site, filter string) ([]Device, error) {
+	rawDevices, err := u.RawDevices(site, filter)
+	if err != nil {
+		return nil, err
+	}
 
 	// Devices
 	var devices []Device
-
-	rawDevices, err := u.RawDevices(site, filter)
-
-	for i, _ := range rawDevices {
+	for _, v := range rawDevices {
 		var device *Device
-		err := json.Unmarshal(rawDevices[i].Data, &device)
+		err := json.Unmarshal(v.Data, &device)
 		if err != nil {
 			return devices, err
 		}
@@ -613,7 +614,7 @@ func (u *Unifi) Devices(site *Site, filter string) ([]Device, error) {
 
 		devices = append(devices, *device)
 	}
-	return devices, err
+	return devices, nil
 }
 
 // Returns a map of access points with mac as a key

@@ -10,7 +10,7 @@ import (
 	"encoding/json"
 	"errors"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"log"
 	"net/http"
 	"net/http/cookiejar"
@@ -85,7 +85,7 @@ func (u *Unifi) Logout() {
 	u.client.Get(u.baseURL + "logout")
 }
 
-func (u *Unifi) apicmd(site *Site, cmd string, payload interface{}) ([]byte, error) {
+func (u *Unifi) apicmd(site *Site, cmd string, payload any) ([]byte, error) {
 
 	url := u.apiURL
 
@@ -118,14 +118,14 @@ func (u *Unifi) apicmd(site *Site, cmd string, payload interface{}) ([]byte, err
 	}
 
 	defer resp.Body.Close()
-	body, err := ioutil.ReadAll(resp.Body)
+	body, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, err
 	}
 	return body, nil
 }
 
-func (u *Unifi) apicmdPut(site *Site, cmd string, data interface{}) error {
+func (u *Unifi) apicmdPut(site *Site, cmd string, data any) error {
 
 	url := u.apiURL
 
@@ -188,7 +188,7 @@ func (u *Unifi) stacmd(site, mac, cmd string, min ...int) error {
 	return u.maccmd(site, "stamgr", command{Mac: mac, Cmd: cmd, Minutes: minutes})
 }
 
-func (u *Unifi) maccmd(site string, mgr string, args interface{}) error {
+func (u *Unifi) maccmd(site string, mgr string, args any) error {
 	apiURL := u.apiURL
 
 	// For site specific command, add site settings
@@ -205,7 +205,7 @@ func (u *Unifi) maccmd(site string, mgr string, args interface{}) error {
 	return err
 }
 
-func (u *Unifi) parse(site *Site, cmd string, payload interface{}, v interface{}) error {
+func (u *Unifi) parse(site *Site, cmd string, payload any, v any) error {
 	body, err := u.apicmd(site, cmd, payload)
 	if err != nil {
 		return err
@@ -294,7 +294,7 @@ func (u *Unifi) PortProfile(site *Site, name string) (*PortProfile, error) {
 			return &p, err
 		}
 	}
-	return nil, fmt.Errorf("No Profile with name: %s", name)
+	return nil, fmt.Errorf("no profile with name: %s", name)
 }
 
 // Sets the portoverrides of a given device

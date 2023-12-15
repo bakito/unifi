@@ -24,11 +24,11 @@ type USW struct {
 	} `json:"config_network"`
 	ConnectRequestIP string `json:"connect_request_ip"`
 	//ConnectRequestPort int           `json:"connect_request_port"` //FIXME: Prior to 5.7.20 type string!
-	ConsideredLostAt     int           `json:"considered_lost_at"`
-	DeviceID             string        `json:"device_id"`
-	DhcpServerTable      []interface{} `json:"dhcp_server_table"`
-	Dot1XPortctrlEnabled bool          `json:"dot1x_portctrl_enabled"`
-	DownlinkTable        []interface{} `json:"downlink_table"`
+	ConsideredLostAt     int    `json:"considered_lost_at"`
+	DeviceID             string `json:"device_id"`
+	DhcpServerTable      []any  `json:"dhcp_server_table"`
+	Dot1XPortctrlEnabled bool   `json:"dot1x_portctrl_enabled"`
+	DownlinkTable        []any  `json:"downlink_table"`
 	EthernetTable        []struct {
 		Mac     string `json:"mac"`
 		Name    string `json:"name"`
@@ -60,7 +60,7 @@ type USW struct {
 	RxBytes            int64          `json:"rx_bytes"`
 	Serial             string         `json:"serial"`
 	SiteID             string         `json:"site_id"`
-	SSHSessionTable    []interface{}  `json:"ssh_session_table"`
+	SSHSessionTable    []any          `json:"ssh_session_table"`
 	Stat               struct {
 		Bytes    float64   `json:"bytes"`
 		Datetime time.Time `json:"datetime"`
@@ -113,17 +113,17 @@ type USW struct {
 		NumPort     int    `json:"num_port"`
 		PortIdx     int    `json:"port_idx"`
 		RxBytes     int64  `json:"rx_bytes"`
-		RxBytesR    int    `json:"rx_bytes-r"`
-		RxDropped   int    `json:"rx_dropped"`
-		RxErrors    int    `json:"rx_errors"`
-		RxMulticast int    `json:"rx_multicast"`
-		RxPackets   int    `json:"rx_packets"`
+		RxBytesR    int64  `json:"rx_bytes-r"`
+		RxDropped   int64  `json:"rx_dropped"`
+		RxErrors    int64  `json:"rx_errors"`
+		RxMulticast int64  `json:"rx_multicast"`
+		RxPackets   int64  `json:"rx_packets"`
 		Speed       int    `json:"speed"`
 		TxBytes     int64  `json:"tx_bytes"`
-		TxBytesR    int    `json:"tx_bytes-r"`
-		TxDropped   int    `json:"tx_dropped"`
-		TxErrors    int    `json:"tx_errors"`
-		TxPackets   int    `json:"tx_packets"`
+		TxBytesR    int64  `json:"tx_bytes-r"`
+		TxDropped   int64  `json:"tx_dropped"`
+		TxErrors    int64  `json:"tx_errors"`
+		TxPackets   int64  `json:"tx_packets"`
 		Type        string `json:"type"`
 		Up          bool   `json:"up"`
 	} `json:"uplink"`
@@ -143,15 +143,16 @@ type USWmap map[string]USW
 
 // Returns a slice of switches
 func (u *Unifi) USWs(site *Site) ([]USW, error) {
+	rawDevices, err := u.RawDevices(site, "usw")
+	if err != nil {
+		return nil, err
+	}
 
 	// Devices
 	var usws []USW
-
-	rawDevices, err := u.RawDevices(site, "usw")
-
-	for i, _ := range rawDevices {
+	for _, v := range rawDevices {
 		var usw USW
-		err := json.Unmarshal(rawDevices[i].Data, &usw)
+		err := json.Unmarshal(v.Data, &usw)
 		if err != nil {
 			return usws, err
 		}
@@ -160,7 +161,7 @@ func (u *Unifi) USWs(site *Site) ([]USW, error) {
 
 		usws = append(usws, usw)
 	}
-	return usws, err
+	return usws, nil
 }
 
 // Returns a map of access points with mac as a key
@@ -187,7 +188,7 @@ func (u *Unifi) USW(site *Site, name string) (*USW, error) {
 			return &d, nil
 		}
 	}
-	return nil, fmt.Errorf("No device with name: %s", name)
+	return nil, fmt.Errorf("no device with name: %s", name)
 }
 
 // Reboot access point

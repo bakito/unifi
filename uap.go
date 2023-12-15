@@ -14,21 +14,21 @@ type UAP struct {
 	u  *Unifi
 	ID string `json:"_id"`
 	//Uptime        int           `json:"_uptime"`
-	Adopted       bool          `json:"adopted"`
-	AntennaTable  []interface{} `json:"antenna_table"`
-	Bytes         int           `json:"bytes"`
-	BytesD        int           `json:"bytes-d"`
-	BytesR        int           `json:"bytes-r"`
-	Cfgversion    string        `json:"cfgversion"`
+	Adopted       bool   `json:"adopted"`
+	AntennaTable  []any  `json:"antenna_table"`
+	Bytes         int64  `json:"bytes"`
+	BytesD        int64  `json:"bytes-d"`
+	BytesR        int64  `json:"bytes-r"`
+	Cfgversion    string `json:"cfgversion"`
 	ConfigNetwork struct {
 		IP   string `json:"ip"`
 		Type string `json:"type"`
 	} `json:"config_network"`
 	ConnectRequestIP string `json:"connect_request_ip"`
 	//ConnectRequestPort int           `json:"connect_request_port"` //FIXME: Prior to 5.7.20 type string!
-	ConsideredLostAt int           `json:"considered_lost_at"`
-	DeviceID         string        `json:"device_id"`
-	DownlinkTable    []interface{} `json:"downlink_table"`
+	ConsideredLostAt int    `json:"considered_lost_at"`
+	DeviceID         string `json:"device_id"`
+	DownlinkTable    []any  `json:"downlink_table"`
 	EthernetTable    []struct {
 		Mac     string `json:"mac"`
 		Name    string `json:"name"`
@@ -53,11 +53,11 @@ type UAP struct {
 	MapID string `json:"map_id"`
 	Model string `json:"model"`
 
-	Name            string        `json:"name"`
-	NextHeartbeatAt int           `json:"next_heartbeat_at"`
-	NumSta          int           `json:"num_sta"`
-	PortStats       []interface{} `json:"port_stats"`
-	PortTable       []Port        `json:"port_table,omitempty"`
+	Name            string `json:"name"`
+	NextHeartbeatAt int    `json:"next_heartbeat_at"`
+	NumSta          int    `json:"num_sta"`
+	PortStats       []any  `json:"port_stats"`
+	PortTable       []Port `json:"port_table,omitempty"`
 	RadioTable      []struct {
 		BuiltinAntGain     int    `json:"builtin_ant_gain"`
 		BuiltinAntenna     bool   `json:"builtin_antenna"`
@@ -74,34 +74,34 @@ type UAP struct {
 		Is11Ac             bool   `json:"is_11ac,omitempty"`
 	} `json:"radio_table"`
 	RadioTableStats []struct {
-		AstBeXmit   interface{} `json:"ast_be_xmit"`
-		AstCst      interface{} `json:"ast_cst"`
-		AstTxto     interface{} `json:"ast_txto"`
-		Channel     int         `json:"channel"`
-		CuSelfRx    int         `json:"cu_self_rx"`
-		CuSelfTx    int         `json:"cu_self_tx"`
-		CuTotal     int         `json:"cu_total"`
-		Extchannel  int         `json:"extchannel"`
-		Gain        int         `json:"gain"`
-		GuestNumSta int         `json:"guest-num_sta"`
-		Name        string      `json:"name"`
-		NumSta      int         `json:"num_sta"`
-		Radio       string      `json:"radio"`
-		State       string      `json:"state"`
-		TxPackets   int         `json:"tx_packets"`
-		TxPower     int         `json:"tx_power"`
-		TxRetries   int         `json:"tx_retries"`
-		UserNumSta  int         `json:"user-num_sta"`
+		AstBeXmit   any    `json:"ast_be_xmit"`
+		AstCst      any    `json:"ast_cst"`
+		AstTxto     any    `json:"ast_txto"`
+		Channel     int    `json:"channel"`
+		CuSelfRx    int    `json:"cu_self_rx"`
+		CuSelfTx    int    `json:"cu_self_tx"`
+		CuTotal     int    `json:"cu_total"`
+		Extchannel  int    `json:"extchannel"`
+		Gain        int    `json:"gain"`
+		GuestNumSta int    `json:"guest-num_sta"`
+		Name        string `json:"name"`
+		NumSta      int    `json:"num_sta"`
+		Radio       string `json:"radio"`
+		State       string `json:"state"`
+		TxPackets   int64  `json:"tx_packets"`
+		TxPower     int64  `json:"tx_power"`
+		TxRetries   int64  `json:"tx_retries"`
+		UserNumSta  int    `json:"user-num_sta"`
 	} `json:"radio_table_stats"`
 
-	RxBytes          int           `json:"rx_bytes"`
-	RxBytesD         int           `json:"rx_bytes-d"`
-	ScanRadioTable   []interface{} `json:"scan_radio_table"`
-	Scanning         bool          `json:"scanning"`
-	Serial           string        `json:"serial"`
-	SiteID           string        `json:"site_id"`
-	SpectrumScanning bool          `json:"spectrum_scanning"`
-	SSHSessionTable  []interface{} `json:"ssh_session_table"`
+	RxBytes          int64  `json:"rx_bytes"`
+	RxBytesD         int64  `json:"rx_bytes-d"`
+	ScanRadioTable   []any  `json:"scan_radio_table"`
+	Scanning         bool   `json:"scanning"`
+	Serial           string `json:"serial"`
+	SiteID           string `json:"site_id"`
+	SpectrumScanning bool   `json:"spectrum_scanning"`
+	SSHSessionTable  []any  `json:"ssh_session_table"`
 	Stat             struct {
 		Ap struct {
 			Ap                                             string    `json:"ap"`
@@ -204,8 +204,8 @@ type UAP struct {
 	} `json:"sys_stats"`
 	SystemStats struct {
 	} `json:"system-stats"`
-	TxBytes           int    `json:"tx_bytes"`
-	TxBytesD          int    `json:"tx_bytes-d"`
+	TxBytes           int64  `json:"tx_bytes"`
+	TxBytesD          int64  `json:"tx_bytes-d"`
 	Type              string `json:"type"`
 	Upgradable        bool   `json:"upgradable"`
 	UpgradeState      int    `json:"upgrade_state"`
@@ -219,23 +219,23 @@ type UAP struct {
 		Netmask     string `json:"netmask"`
 		NumPort     int    `json:"num_port"`
 		RxBytes     int64  `json:"rx_bytes"`
-		RxBytesR    int    `json:"rx_bytes-r"`
-		RxDropped   int    `json:"rx_dropped"`
-		RxErrors    int    `json:"rx_errors"`
-		RxMulticast int    `json:"rx_multicast"`
-		RxPackets   int    `json:"rx_packets"`
+		RxBytesR    int64  `json:"rx_bytes-r"`
+		RxDropped   int64  `json:"rx_dropped"`
+		RxErrors    int64  `json:"rx_errors"`
+		RxMulticast int64  `json:"rx_multicast"`
+		RxPackets   int64  `json:"rx_packets"`
 		Speed       int    `json:"speed"`
 		TxBytes     int64  `json:"tx_bytes"`
-		TxBytesR    int    `json:"tx_bytes-r"`
-		TxDropped   int    `json:"tx_dropped"`
-		TxErrors    int    `json:"tx_errors"`
-		TxPackets   int    `json:"tx_packets"`
+		TxBytesR    int64  `json:"tx_bytes-r"`
+		TxDropped   int64  `json:"tx_dropped"`
+		TxErrors    int64  `json:"tx_errors"`
+		TxPackets   int64  `json:"tx_packets"`
 		Type        string `json:"type"`
 		Up          bool   `json:"up"`
 	} `json:"uplink"`
-	UplinkTable []interface{} `json:"uplink_table"`
-	Uptime      int           `json:"uptime"`
-	UserNumSta  int           `json:"user-num_sta"`
+	UplinkTable []any `json:"uplink_table"`
+	Uptime      int   `json:"uptime"`
+	UserNumSta  int   `json:"user-num_sta"`
 	VapTable    []struct {
 		ApMac      string `json:"ap_mac"`
 		Bssid      string `json:"bssid"`
@@ -250,40 +250,40 @@ type UAP struct {
 		NumSta     int    `json:"num_sta"`
 		Radio      string `json:"radio"`
 		RadioName  string `json:"radio_name"`
-		RxBytes    int    `json:"rx_bytes"`
-		RxCrypts   int    `json:"rx_crypts"`
-		RxDropped  int    `json:"rx_dropped"`
-		RxErrors   int    `json:"rx_errors"`
-		RxFrags    int    `json:"rx_frags"`
-		RxNwids    int    `json:"rx_nwids"`
-		RxPackets  int    `json:"rx_packets"`
+		RxBytes    int64  `json:"rx_bytes"`
+		RxCrypts   int64  `json:"rx_crypts"`
+		RxDropped  int64  `json:"rx_dropped"`
+		RxErrors   int64  `json:"rx_errors"`
+		RxFrags    int64  `json:"rx_frags"`
+		RxNwids    int64  `json:"rx_nwids"`
+		RxPackets  int64  `json:"rx_packets"`
 		SiteID     string `json:"site_id"`
 		State      string `json:"state"`
 		T          string `json:"t"`
-		TxBytes    int    `json:"tx_bytes"`
-		TxDropped  int    `json:"tx_dropped"`
-		TxErrors   int    `json:"tx_errors"`
-		TxPackets  int    `json:"tx_packets"`
-		TxPower    int    `json:"tx_power"`
-		TxRetries  int    `json:"tx_retries"`
+		TxBytes    int64  `json:"tx_bytes"`
+		TxDropped  int64  `json:"tx_dropped"`
+		TxErrors   int64  `json:"tx_errors"`
+		TxPackets  int64  `json:"tx_packets"`
+		TxPower    int64  `json:"tx_power"`
+		TxRetries  int64  `json:"tx_retries"`
 		Up         bool   `json:"up"`
 		Usage      string `json:"usage"`
 		WlanconfID string `json:"wlanconf_id"`
 	} `json:"vap_table"`
-	Version                string        `json:"version"`
-	VersionIncompatible    bool          `json:"version_incompatible"`
-	VwireEnabled           bool          `json:"vwireEnabled"`
-	VwireTable             []interface{} `json:"vwire_table"`
-	VwireVapTable          []interface{} `json:"vwire_vap_table"`
-	WifiCaps               int           `json:"wifi_caps"`
-	X                      fuzzyFloat    `json:"x"`
-	XAuthkey               string        `json:"x_authkey"`
-	XFingerprint           string        `json:"x_fingerprint"`
-	XHasSSHHostkey         bool          `json:"x_has_ssh_hostkey"`
-	XInformAuthkey         string        `json:"x_inform_authkey"`
-	XSSHHostkeyFingerprint string        `json:"x_ssh_hostkey_fingerprint"`
-	XVwirekey              string        `json:"x_vwirekey"`
-	Y                      fuzzyFloat    `json:"y"`
+	Version                string     `json:"version"`
+	VersionIncompatible    bool       `json:"version_incompatible"`
+	VwireEnabled           bool       `json:"vwireEnabled"`
+	VwireTable             []any      `json:"vwire_table"`
+	VwireVapTable          []any      `json:"vwire_vap_table"`
+	WifiCaps               int        `json:"wifi_caps"`
+	X                      fuzzyFloat `json:"x"`
+	XAuthkey               string     `json:"x_authkey"`
+	XFingerprint           string     `json:"x_fingerprint"`
+	XHasSSHHostkey         bool       `json:"x_has_ssh_hostkey"`
+	XInformAuthkey         string     `json:"x_inform_authkey"`
+	XSSHHostkeyFingerprint string     `json:"x_ssh_hostkey_fingerprint"`
+	XVwirekey              string     `json:"x_vwirekey"`
+	Y                      fuzzyFloat `json:"y"`
 }
 
 type UAPmap map[string]UAP
@@ -296,15 +296,16 @@ func (u *Unifi) Aps(site *Site) ([]UAP, error) {
 
 // Returns a slice of access points
 func (u *Unifi) UAPs(site *Site) ([]UAP, error) {
+	rawDevices, err := u.RawDevices(site, "uap")
+	if err != nil {
+		return nil, err
+	}
 
 	// Devices
 	var uaps []UAP
-
-	rawDevices, err := u.RawDevices(site, "uap")
-
-	for i, _ := range rawDevices {
+	for _, v := range rawDevices {
 		var uap UAP
-		err := json.Unmarshal(rawDevices[i].Data, &uap)
+		err := json.Unmarshal(v.Data, &uap)
 		if err != nil {
 			return uaps, err
 		}
@@ -313,7 +314,7 @@ func (u *Unifi) UAPs(site *Site) ([]UAP, error) {
 
 		uaps = append(uaps, uap)
 	}
-	return uaps, err
+	return uaps, nil
 }
 
 // Returns a map of access points with mac as a key
