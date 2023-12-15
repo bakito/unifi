@@ -196,7 +196,7 @@ func (s USW) Restart() error {
 	if s.u == nil {
 		return ErrLoginFirst
 	}
-	return s.u.devcmd(s.Mac, "restart")
+	return s.u.devcmd("", s.Mac, "restart")
 }
 
 func (s USW) DeviceName() string {

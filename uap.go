@@ -335,7 +335,7 @@ func (a UAP) Restart() error {
 	if a.u == nil {
 		return ErrLoginFirst
 	}
-	return a.u.devcmd(a.Mac, "restart")
+	return a.u.devcmd("",a.Mac, "restart")
 }
 
 func (a UAP) DeviceName() string {

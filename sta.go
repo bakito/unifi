@@ -78,33 +78,33 @@ func (s Sta) Block() error {
 	if s.u == nil {
 		return ErrLoginFirst
 	}
-	return s.u.stacmd(s.Mac, "block-sta")
+	return s.u.stacmd(s.SiteID,s.Mac, "block-sta")
 }
 
 func (s Sta) UnBlock() error {
 	if s.u == nil {
 		return ErrLoginFirst
 	}
-	return s.u.stacmd(s.Mac, "unblock-sta")
+	return s.u.stacmd(s.SiteID,s.Mac, "unblock-sta")
 }
 
 func (s Sta) Disconnect() error {
 	if s.u == nil {
 		return ErrLoginFirst
 	}
-	return s.u.stacmd(s.Mac, "kick-sta")
+	return s.u.stacmd(s.SiteID,s.Mac, "kick-sta")
 }
 
 func (s Sta) AuthorizeGuest(minutes int) error {
 	if s.u == nil {
 		return ErrLoginFirst
 	}
-	return s.u.stacmd(s.Mac, "authorize-guest", minutes)
+	return s.u.stacmd(s.SiteID,s.Mac, "authorize-guest", minutes)
 }
 
 func (s Sta) UnauthorizeGuest() error {
 	if s.u == nil {
 		return ErrLoginFirst
 	}
-	return s.u.stacmd(s.Mac, "unauthorize-guest")
+	return s.u.stacmd(s.SiteID,s.Mac, "unauthorize-guest")
 }
